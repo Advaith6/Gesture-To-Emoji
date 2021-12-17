@@ -1,3 +1,4 @@
+toSpeak = "";
 Webcam.set({
     width: 350,
     height: 300,
@@ -19,9 +20,46 @@ function modelLoaded() {
     console.log('Model Loaded!');
 }
 
+function check() {
+    img = document.getElementById('captured_image');
+    classifier.classify(img, gotResult)
+}
+
+function gotResult(error, results) {
+    if (error) {
+        console.error(error);
+    } else {
+        document.getElementById("result_object_name").innerHTML = results[0].label;
+        gesture = results[0].label;
+        toSpeak = "";
+        if (gesture == "Thumbs Up") {
+            toSpeak = "That's a thumbs up!";
+            document.getElementById("result_object_gesture_icon").innerHTML = "&#128077;";
+        }
+        else if (gesture == "Thumbs Down") {
+            toSpeak = "sorry, a thumbs down";
+            document.getElementById("result_object_gesture_icon").innerHTML = "&#128078;";
+        }
+        else if (gesture == "Cool") {
+            toSpeak = "Oh yeah thats cool";
+            document.getElementById("result_object_gesture_icon").innerHTML = "&#129304;";
+        }
+        else if (gesture == "Great") {
+            toSpeak = "that's great!";
+            document.getElementById("result_object_gesture_icon").innerHTML = "&#128076;";
+        }
+        else if (gesture == "Stop") {
+            toSpeak = "Stop right there!";
+            document.getElementById("result_object_gesture_icon").innerHTML = "&#9995;";
+        }
+    }
+}
+
 function speak() {
     var synth = window.speechSynthesis;
     speak_data = toSpeak;
-    var utterThis = new SpeechSynthesisUtterance(speak_data_1 + speak_data_2);
+    var utterThis = new SpeechSynthesisUtterance(speak_data);
     synth.speak(utterThis);
 }
+
+
